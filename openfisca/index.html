@@ -8,7 +8,7 @@
 
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/solarized.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/monokai.css">
@@ -27,10 +27,100 @@
 			<div class="slides">
 				<section data-markdown>
 					<textarea data-template>
-						# OpenFisca 101
+						# OpenFisca
+						turn law in code
 					</textarea>
 				</section>
-				<section>Slide 2</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Law is often very complex...
+						<p class="fragment">Calculating taxes from income</p>
+						<p class="fragment">Determining benefit eligibility</p>
+						<p class="fragment">Determining citizenship status</p>
+						<p class="fragment">...and a bunch of others</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Law is a just algorithms
+						<p class="fragment">The variables are facts about a person</p>
+						<p class="fragment">The parameters are the facts in law</p>
+						<p class="fragment">The result is a calculation of those facts</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Can I get citizenship?
+						<p class="fragment">Paul has lived in NZ for four years</p>
+						<p class="fragment">Paul has permenant residency for two years</p>
+						<p class="fragment">Paul has had a work visa for two years</p>
+						<p class="fragment">Citizenship requires five years minimum</p>
+						<p class="fragment">Paul can not get citizenship</p>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						## Can I get citizenship? part 2
+						<pre>
+							<code data-trim>
+							def can_get_citizenship(visa_time, residency_time):
+								minimum_length = 5
+								return (visa_time + residency_time) >= minimum_length
+							</code>
+						</pre>
+					</textarea>
+				</section>
+				<section data-markdown>
+					<textarea data-template>
+						# OpenFisca
+						<p class="fragment">Developed for the French government</p>
+						<p class="fragment">Simple tax & benefit framework</p>
+						<p class="fragment">Generic framework for codifying any law</p>
+						<p class="fragment">Open source</p>
+					</textarea>
+				</section>
+				<section>
+					<section data-markdown>
+						<textarea data-template>
+							# Key concepts
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Parameters
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Variables
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Formulas
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Persons
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Periods
+						</textarea>
+					</section>
+			</section>
+			<section data-markdown>
+				<textarea data-template>
+					# Web API
+				</textarea>
+			</section>
+			<section data-markdown>
+				<textarea data-template>
+					# TDD for law
+				</textarea>
+			</section>
 			</div>
 		</div>
 
