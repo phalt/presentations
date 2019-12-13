@@ -1,0 +1,12 @@
+{
+    "persons": {
+        "bob": {
+            "income_tax__net_income": {
+                "2018": 100000
+            },
+            "income_tax__paye_income": {
+                "2018": null
+            }
+        }
+    }
+}

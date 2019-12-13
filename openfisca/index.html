@@ -28,7 +28,7 @@
 				<section data-markdown>
 					<textarea data-template>
 						# OpenFisca
-						turn law in code
+						turning law in code
 					</textarea>
 				</section>
 				<section data-markdown>
@@ -88,40 +88,325 @@
 					<section data-markdown>
 						<textarea data-template>
 							# Parameters
+							<p class="fragment">A property of legislation</p>
+							<p class="fragment">Not specific to any person</p>
+							<p class="fragment">Can change over time (new laws, etc)</p>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							## Parameter examples
+							<p class="fragment">The minimum wage</p>
+							<p class="fragment">Number of days required to become a citizen</p>
+							<p class="fragment">Marginal tax scale for calculating income</p>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							## Parameter examples
+							<pre>
+								<code data-trim>
+									# my_parameter_name.yaml
+									---
+									description: Minimum family tax credit perscribed amount
+									reference: "http://www.legislation.govt.nz/act/act.html"
+									values:
+									  "2018":
+										value: 26156
+								</code>
+							</pre>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							## Parameter examples
+							<pre>
+								<code data-trim>
+									# my_parameter_name.yaml
+									---
+									description: Minimum family tax credit perscribed amount
+									reference: "http://www.legislation.govt.nz/act/act.html"
+									values:
+										"2018":
+										value: 26156
+										"2020":
+										value: 30000
+								</code>
+							</pre>
 						</textarea>
 					</section>
 					<section data-markdown>
 						<textarea data-template>
 							# Variables
+							<p class="fragment">A property of a person</p>
+							<p class="fragment">Supplied as input arguments</p>
+							<p class="fragment">Requested as output arguments</p>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							## Input variables
+							<p class="fragment">Booleans, floats, and dates</p>
+							<p class="fragment">Supplied in an object like <code>{"period": value }</code></p>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							## Input variables
+							<pre>
+								<code data-trim>
+									# my_variables.py
+									class income_tax__net_income(Variable):
+										value_type = float
+										entity = Person
+										definition_period = YEAR
+										label = "Net income"
+										reference = (
+											"http://www.legislation.govt.nz/act/act.html"
+										)
+								</code>
+							</pre>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							## Output variables
+							<p>also known as...</p>
 						</textarea>
 					</section>
 					<section data-markdown>
 						<textarea data-template>
 							# Formulas
+							<p class="fragment">A method on Variable class that calculates the result</p>
+							<p class="fragment">Can have input variable dependencies</p>
+							<p class="fragment">Has a period requirement</p>
 						</textarea>
 					</section>
 					<section data-markdown>
 						<textarea data-template>
-							# Persons
+							# Formulas
+							<pre>
+								<code data-trim>
+									# my_variables.py
+									class income_tax__net_income(Variable):
+										...
+										def formula(person, period, parameters):
+											gross = person(
+												"income_tax__annual_gross_income", period
+											)
+											total_deducation = person(
+												"income_tax__annual_total_deduction", period
+											)
+
+											return gross - total_deducation
+								</code>
+							</pre>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Formulas
+							<pre>
+								<code data-trim>
+									# my_variables.py
+									class income_tax__flat_tax_amount(Variable):
+										...
+										def formula(person, period, parameters):
+											gross = person(
+												"income_tax__annual_gross_income", period
+											)
+											flat_tax = parameters(period).taxes.flat_tax
+
+											return net_income * flat_tax
+								</code>
+							</pre>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Entities
+							<p class="fragment">People, family, property</p>
+							<p class="fragment">Things that law has an affect on</p>
+							<p class="fragment">Associated to variables</p>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Entities
+							<pre>
+								<code data-trim data-line-numbers="4">
+									# my_variables.py
+									class income_tax__net_income(Variable):
+										value_type = float
+										entity = Person
+										definition_period = YEAR
+										label = "Net income"
+										reference = (
+											"http://www.legislation.govt.nz/act/act.html"
+										)
+								</code>
+							</pre>
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							# Entities
+							<pre>
+								<code data-trim data-line-numbers="5-7">
+									# my_variables.py
+									class income_tax__flat_tax_amount(Variable):
+										...
+										def formula(person, period, parameters):
+											gross = person(
+												"income_tax__net_income", period
+											)
+											flat_tax = parameters(period).taxes.flat_tax
+
+											return net_income * flat_tax
+								</code>
+							</pre>
 						</textarea>
 					</section>
 					<section data-markdown>
 						<textarea data-template>
 							# Periods
+							<p class="fragment">Points in time</p>
+              <p class="fragment">Because laws change over time</p>
+              <p class="fragment">Calculate old laws...and test out new ones!</p>
 						</textarea>
 					</section>
-			</section>
-			<section data-markdown>
-				<textarea data-template>
-					# Web API
-				</textarea>
-			</section>
-			<section data-markdown>
-				<textarea data-template>
-					# TDD for law
-				</textarea>
-			</section>
-			</div>
+					<section data-markdown>
+						<textarea data-template>
+							# Periods
+							<pre>
+								<code data-trim >
+									{
+										"persons": {
+											"bob": {
+												"income_tax__net_income": {
+													"2019": 100000,
+													"2022": 100000
+												}
+											}
+										}
+									}
+								</code>
+							</pre>
+						</textarea>
+					</section>
+      </section>
+      <section>
+        <section data-markdown>
+          <textarea data-template>
+            # Web API
+            <p class="fragment">For accessing parameters, variables, and entities</p>
+            <p class="fragment">For running calculations</p>
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            # Running calculations
+            <p class="fragment">Write some JSON</p>
+            <p class="fragment">Set values you want calculated to "null"</p>
+            <p class="fragment">Send API request with values</p>
+            <p class="fragment">JSON response is identical, values filled in!</p>
+          </textarea>
+        </section>
+        <section data-markdown>
+			<textarea data-template>
+              # API request
+              <pre>
+                <code data-trim >
+                  {
+                    "persons": {
+                      "bob": {
+                        "income_tax__net_income": {
+                          "2019": 100000
+                        },
+                        "income_tax__paye_income": {
+                          "2019": null
+                        }
+                      }
+                    }
+                  }
+                </code>
+              </pre>
+            </textarea>
+        </section>
+        <section data-markdown>
+                <textarea data-template>
+                  # API response
+                  <pre>
+                    <code data-trim >
+                      {
+                        "persons": {
+                          "bob": {
+                            "income_tax__net_income": {
+                              "2019": 100000
+                            },
+                            "income_tax__paye_income": {
+                              "2019": 76090.23
+                            }
+                          }
+                        }
+                      }
+                    </code>
+                  </pre>
+                </textarea>
+            </section>
+      </section>
+      <section>
+            <section data-markdown>
+                <textarea data-template>
+                    # TDD for law
+                    <p class="fragment">Tests can be written by normal humans</p>
+                    <p class="fragment">Write new laws as tests first</p>
+                    <p class="fragment">Code formulas to match test cases</p>
+                </textarea>
+            </section>
+            <section data-markdown>
+                    <textarea data-template>
+                        <pre>
+                            <code data-trim >
+                                # test_paye_income.yaml
+                                ---
+                                - name: paye income very large amount
+                                  period: 2019
+                                  absolute_error_margin: 1
+                                  input:
+                                    income_tax__net_income: 100000
+                                  output:
+                                    income_tax__paye_income: 76080
+                            </code>
+                        </pre>
+                    </textarea>
+            </section>
+            <section data-markdown>
+                    <textarea data-template>
+                        <pre>
+                            <code data-trim >
+                                # test_paye_income.yaml
+                                ---
+                                - name: paye income very large amount
+                                  period: 2019
+                                  absolute_error_margin: 1
+                                  input:
+                                    income_tax__net_income: 100000
+                                  output:
+                                    income_tax__paye_income: 76080
+                                - name: paye income very large amount in 2020
+                                  period: 2020
+                                  absolute_error_margin: 1
+                                  input:
+                                    income_tax__net_income: 100000
+                                  output:
+                                    income_tax__paye_income: 80000
+                            </code>
+                        </pre>
+                    </textarea>
+            </section>
+      </section>
+    </div>
 		</div>
 
 		<script src="js/reveal.js"></script>
